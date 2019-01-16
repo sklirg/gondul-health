@@ -103,7 +103,7 @@ var handler_snmpup = {
 	name:"SNMP Uplink state"
 };
 
-var handlerInfo = function(tag,desc) {
+export var handlerInfo = function(tag,desc) {
 	/*
 	 * Short name, typically matching the url anchor.
 	 */
@@ -150,7 +150,7 @@ var handlers = [
 	handler_snmpup
 	];
 
-function uplinkInfo(sw)
+export function uplinkInfo(sw)
 {
 	var ret = new handlerInfo("snmpup","Uplinks");
 	ret.why = "Uplinks";
@@ -215,7 +215,7 @@ function uplinkInfo(sw)
 /*
  * Update function for uplink map
  */
-function uplinkUpdater()
+export function uplinkUpdater()
 {
 	if (!nmsData.switches)
 		return;
@@ -252,7 +252,7 @@ function uplinkUpdater()
 /*
  * Init-function for uplink map
  */
-function uplinkInit()
+export function uplinkInit()
 {
 	nmsData.addHandler("switches","mapHandler",uplinkUpdater);
 	nmsData.addHandler("switchstate","mapHandler",uplinkUpdater);
@@ -266,7 +266,7 @@ function uplinkInit()
 /*
  * Init-function for uplink map
  */
-function trafficInit()
+export function trafficInit()
 {
 	nmsData.addHandler("switches","mapHandler",trafficUpdater);
 	nmsData.addHandler("switchstate","mapHandler",trafficUpdater);
@@ -279,7 +279,7 @@ function trafficInit()
 	setLegend(2,colorFromSpeed(10 * m),"10Mb/s");	
 }
 
-function trafficUpdater()
+export function trafficUpdater()
 {
 	if (!nmsData.switchstate.switches || !nmsData.switchstate.then)
 		return;
@@ -301,7 +301,7 @@ function trafficUpdater()
 	}
 }
 
-function trafficTotInit()
+export function trafficTotInit()
 {
 	nmsData.addHandler("switches","mapHandler",trafficTotUpdater);
 	nmsData.addHandler("switchstate","mapHandler",trafficTotUpdater);
@@ -314,7 +314,7 @@ function trafficTotInit()
 	setLegend(2,colorFromSpeed(100 * m,5),"100Mb/s");	
 }
 
-function trafficTotUpdater()
+export function trafficTotUpdater()
 {
 	if (!nmsData.switchstate.switches || !nmsData.switchstate.then)
 		return;
@@ -334,7 +334,7 @@ function trafficTotUpdater()
 	}
 }
 
-function colorFromSpeed(speed,factor)
+export function colorFromSpeed(speed,factor)
 {
 	var m = 1024 * 1024 / 8;
 	if (factor == undefined)
@@ -350,7 +350,7 @@ function colorFromSpeed(speed,factor)
  * thing (e.g., "0" is 20 and "15" is 35 by the time we pass it to
  * rgb_from_max());
  */
-function temp_color(t)
+export function temp_color(t)
 {
 	if (t == undefined) {
 		console.log("Temp_color, but temp is undefined");
@@ -361,7 +361,7 @@ function temp_color(t)
 	return nmsColor.getColorStop(t);
 }
 
-function tempUpdater()
+export function tempUpdater()
 {
 	if(!nmsData.switches)
 		return;
@@ -382,7 +382,7 @@ function tempUpdater()
 	}
 }
 
-function tempInfo(sw)
+export function tempInfo(sw)
 {
 	var ret = new handlerInfo("temp","Temperature");
 	ret.why = "Temp";
@@ -405,7 +405,7 @@ function tempInfo(sw)
 	}
 	return ret;
 }
-function tempInit()
+export function tempInit()
 { 
 	//Padded the gradient with extra colors for the upper unused values
 	nmsColor.drawGradient(["black", nmsColor.blue, nmsColor.lightblue, nmsColor.lightgreen, nmsColor.green, nmsColor.orange, nmsColor.red]);
@@ -418,7 +418,7 @@ function tempInit()
 	tempUpdater();
 }
 
-function pingUpdater()
+export function pingUpdater()
 {
 	if (nmsData.switches == undefined || nmsData.switches.switches == undefined) {
 		return;
@@ -433,7 +433,7 @@ function pingUpdater()
 	}
 }
 
-function pingInfo(sw)
+export function pingInfo(sw)
 {
 	var ret = new handlerInfo("ping","Latency(ms)");
 	ret.why = "Latency (?)";
@@ -512,7 +512,7 @@ function pingInfo(sw)
 	return ret;
 }
 
-function pingInit()
+export function pingInit()
 {
 	nmsColor.drawGradient([nmsColor.green,nmsColor.lightgreen, nmsColor.orange, nmsColor.red]);
 	setLegend(1,nmsColor.getColorStop(10),"1ms");	
@@ -524,7 +524,7 @@ function pingInit()
 	pingUpdater();
 }
 
-function getDhcpColor(stop)
+export function getDhcpColor(stop)
 {
 	stop = parseInt(stop);
 	stop = stop * 0.85;
@@ -535,7 +535,7 @@ function getDhcpColor(stop)
 	return nmsColor.getColorStop(stop);
 }
 
-function dhcpUpdater()
+export function dhcpUpdater()
 {
 	if (!testTree(nmsData,['dhcp','dhcp']) || !testTree(nmsData,['switches','switches']) || !testTree(nmsData,['smanagement','switches'])) {
 		return;
@@ -553,7 +553,7 @@ function dhcpUpdater()
 		nmsMap.setSwitchColor(sw, c);
 	}
 }
-function dhcpInfo(sw) {
+export function dhcpInfo(sw) {
 	var ret = new handlerInfo("dhcp","DHCP state");
 	ret.why = "No DHCP data";
 	ret.data[0].description = "DHCP age";
@@ -629,7 +629,7 @@ function dhcpInfo(sw) {
 	return ret;
 }
 
-function dhcpInit()
+export function dhcpInit()
 {
 	nmsColor.drawGradient([nmsColor.green, nmsColor.lightgreen, nmsColor.orange, nmsColor.red]);
 	nmsData.addHandler("dhcp","mapHandler",dhcpUpdater);
@@ -644,7 +644,7 @@ function dhcpInit()
 /*
  * Testing-function to randomize colors of linknets and switches
  */
-function randomizeColors()
+export function randomizeColors()
 {
 /*	for (var i in nms.switches_now.linknets) {
 		setLinknetColors(i, getRandomColor(), getRandomColor());
@@ -658,10 +658,10 @@ function randomizeColors()
 	}
 }
 
-function discoDo() {
+export function discoDo() {
 	randomizeColors();
 }
-function discoInit()
+export function discoInit()
 {
 	nmsData.addHandler("ticker", "mapHandler", discoDo);
 	
@@ -674,7 +674,7 @@ function discoInit()
 	discoDo();
 }
 
-function snmpUpdater() {
+export function snmpUpdater() {
 	for (var sw in nmsData.switches.switches) {
 		if (nmsData.snmp.snmp[sw] == undefined || nmsData.snmp.snmp[sw].misc == undefined) {
 			nmsMap.setSwitchColor(sw, nmsColor.red);
@@ -686,7 +686,7 @@ function snmpUpdater() {
 	}
 }
 
-function secondsToTime(input) {
+export function secondsToTime(input) {
 	var d, h, m, s;
 	d = Math.floor(input / 60 / 60 / 24);
 	h = Math.floor((input - (d * 24 * 3600)) / 60 / 60);
@@ -704,7 +704,7 @@ function secondsToTime(input) {
 	return string;
 }
 
-function snmpInfo(sw) {
+export function snmpInfo(sw) {
 	var ret = new handlerInfo("snmp","SNMP data");
 	ret.why = "No SNMP data";
 	if (!testTree(nmsData,['snmp','snmp',sw,'misc'])) {
@@ -746,7 +746,7 @@ function snmpInfo(sw) {
 }
 
 
-function snmpInit() {
+export function snmpInit() {
 	nmsData.addHandler("snmp", "mapHandler", snmpUpdater);
 	
 	setLegend(1,nmsColor.green,"OK");	
@@ -757,7 +757,7 @@ function snmpInit() {
 	snmpUpdater();
 }
 
-function snmpUpInfo(sw) {
+export function snmpUpInfo(sw) {
 	var ret = new handlerInfo("uplink","SNMP uplink data");
 	ret.why = "No SNMP data";
 	ret.score = 0;
@@ -788,7 +788,7 @@ function snmpUpInfo(sw) {
 	return ret;
 }
 
-function cpuInfo(sw) {
+export function cpuInfo(sw) {
 	var ret = new handlerInfo("cpu","CPU utilization");
 	ret.why = "No CPU info";
 	ret.score = 0;
@@ -814,7 +814,7 @@ function cpuInfo(sw) {
 	return ret;
 }
 
-function cpuUpdater() {
+export function cpuUpdater() {
 	for (var sw in nmsData.switches.switches) {
 		try {
 			var cpu = 0;
@@ -830,7 +830,7 @@ function cpuUpdater() {
 		}
 	}
 }
-function memoryUpdater() {
+export function memoryUpdater() {
 	for (var sw in nmsData.switches.switches) {
 		try {
 			var buffer = 0;
@@ -846,7 +846,7 @@ function memoryUpdater() {
 		}
 	}
 }
-function memoryInfo(sw) {
+export function memoryInfo(sw) {
 	var ret = new handlerInfo("memory","Memory utilization");
 	ret.why = "No Memory info";
 	ret.score = 0;
@@ -872,7 +872,7 @@ function memoryInfo(sw) {
 	return ret;
 }
 
-function tagged(sw, tag) {
+export function tagged(sw, tag) {
 	if (testTree(nmsData,['switches','switches',sw, 'tags'])) {
 		if (nmsData.switches.switches[sw].tags.includes(tag)) {
 			return true;
@@ -881,7 +881,7 @@ function tagged(sw, tag) {
 	return false;
 }
 
-function networkInfo(sw) {
+export function networkInfo(sw) {
 	var ret = new handlerInfo("net","Network info");
 	ret.score = 0;
 	ret.why = "All good";
@@ -938,7 +938,7 @@ function networkInfo(sw) {
 	}
 	return ret;
 }
-function mgmtInfo(sw) {
+export function mgmtInfo(sw) {
 	var ret = new handlerInfo("mgmt","Management info");
 	ret.score = 0;
 	ret.why = "All good";
@@ -979,7 +979,7 @@ function mgmtInfo(sw) {
 	return ret;
 }
 
-function cpuInit() {
+export function cpuInit() {
 	nmsData.addHandler("snmp", "mapHandler", cpuUpdater);
 	nmsColor.drawGradient([nmsColor.green,nmsColor.orange,nmsColor.red]);
 	setLegend(1,getColorStop(0),"0 %");
@@ -989,7 +989,7 @@ function cpuInit() {
 	setLegend(5,"white","N/A");
 	cpuUpdater();
 }
-function memoryInit() {
+export function memoryInit() {
 	nmsData.addHandler("snmp", "mapHandler", memoryUpdater);
 	nmsColor.drawGradient([nmsColor.green,nmsColor.orange,nmsColor.red]);
 	setLegend(1,getColorStop(0),"0 %");
@@ -1000,7 +1000,7 @@ function memoryInit() {
 	memoryUpdater();
 }
 
-function healthInfo(sw) {
+export function healthInfo(sw) {
 	var worst = new handlerInfo("health", "Health");
 	var realdata = {};
 	worst.score = 0;
@@ -1025,7 +1025,7 @@ function healthInfo(sw) {
 	return worst;
 }
 
-function healthUpdater() {
+export function healthUpdater() {
 	if (nmsData.switches == undefined || nmsData.switches.switches == undefined)
 		return;
 	for (var sw in nmsData.switches.switches) {
@@ -1044,7 +1044,7 @@ function healthUpdater() {
 	}
 }
 
-function healthInit() {
+export function healthInit() {
 	nmsData.addHandler("ticker", "mapHandler", healthUpdater);
 	nmsColor.drawGradient([nmsColor.green,nmsColor.lightgreen, nmsColor.orange,nmsColor.red]);
 	setLegend(1,nmsColor.getColorStop(0),"All good");
