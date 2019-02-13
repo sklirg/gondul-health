@@ -1,4 +1,4 @@
-import { healthInit } from './nms-map-handlers.mjs';
+import { healthInit } from '../../src/nms-map-handlers.mjs';
 
 console.log('index loaded');
 
