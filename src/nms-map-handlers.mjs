@@ -1,3 +1,5 @@
+import { testTree } from "./nms.mjs";
+
 /*
  * Map handlers/updaters for NMS.
  *
@@ -438,9 +440,8 @@ export function pingInfo(sw)
 	var ret = new handlerInfo("ping","Latency(ms)");
 	ret.why = "Latency (?)";
 	ret.score =0;
-	if (testTree(nmsData,['ping','switches',sw])) {
-		var v4 = nmsData.ping.switches[sw].latency4;
-		var v6 = nmsData.ping.switches[sw].latency6;
+		var v4 = sw.latency4;
+		var v6 = sw.latency6;
 		if (v4 == undefined || v4 == null || isNaN(v4))
 			v4 = undefined;
 		if (v6 == undefined || v6 == null || isNaN(v6))
@@ -470,45 +471,11 @@ export function pingInfo(sw)
 			ret.why = "Latency";
 			ret.score = parseInt(v4 > v6 ? v4 : v6);
 		}
-		if (nmsData.ping.switches[sw].age4 > 10 || nmsData.ping.switches[sw].age6 > 10) {
+		if (sw.age4 > 10 || sw.age6 > 10) {
 			ret.why = "Old ping";
 			ret.score = 900;
 		}
-	} else {
-		ret.data[0].value = "No ping replies";
-		ret.why = "No ping replies";
-		ret.score = 999;
-	}
 
-	if (testTree(nmsData,['smanagement','switches',sw])) {
-		try {
-			var distro = nmsData['smanagement']['switches'][sw]['distro_name'];
-			var phy = nmsData['smanagement']['switches'][sw]['distro_phy_port'];
-			if (!(distro == "" || phy == "" || distro == undefined || phy == undefined)) {
-				if (testTree(nmsData,['snmp','snmp',distro, 'ports',phy,'ifOperStatus'])) {
-					var x = nmsData['snmp']['snmp'][distro]['ports'][phy]['ifOperStatus'];
-					var ping = "no";
-					var ping6 = "no ";
-					try {
-						ping = parseFloat(nmsData["ping"]["switches"][sw]["latency4"]);
-						ping6 = parseFloat(nmsData["ping"]["switches"][sw]["latency6"]);
-					} catch(e) {}
-					if (x == "up") {
-						ret.data[3] = {};
-						ret.data[3].description = "Distro-port";
-						ret.data[3].value = "Distro port is live";
-						if (isNaN(ping) && isNaN(ping6)) {
-							ret.score = 700;
-							ret.why = "Distro port is alive, but no IPv4/IPv6 ping. ROLLBACK!";
-						}
-					}
-				}
-			}
-		} catch(e) {
-			console.log("Lazy about errors....");
-			console.log(e);
-		}
-	}
 	return ret;
 }
 
@@ -873,11 +840,6 @@ export function memoryInfo(sw) {
 }
 
 export function tagged(sw, tag) {
-	if (testTree(nmsData,['switches','switches',sw, 'tags'])) {
-		if (nmsData.switches.switches[sw].tags.includes(tag)) {
-			return true;
-		}
-	}
 	return false;
 }
 
