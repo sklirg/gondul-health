@@ -1,0 +1,16 @@
+{
+  "name": "gondul-health-api",
+  "version": "1.0.0",
+  "main": "server.mjs",
+  "license": "MIT",
+  "dependencies": {
+    "@sklirg/gondul-health": "^1.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "huejay": "^1.8.5",
+    "node-fetch": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.11"
+  }
+}
