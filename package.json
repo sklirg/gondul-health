@@ -1,0 +1,20 @@
+{
+  "name": "@sklirg/gondul-health",
+  "version": "1.0.0",
+  "description": "Gondul health checks as a module ================================",
+  "main": "src/nms-map-handlers.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sklirg/gondul-health.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sklirg/gondul-health/issues"
+  },
+  "homepage": "https://github.com/sklirg/gondul-health#readme"
+}
