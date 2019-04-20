@@ -91,9 +91,7 @@ async function pingHealth(authHeader, config, sendPingData = false) {
       warning: health.filter(
         sw => sw.score >= fairScore && sw.score < warningScore
       ),
-      critical: health.filter(
-        sw => sw.score >= warningScore && sw.score < criticalScore
-      )
+      critical: health.filter(sw => sw.score >= warningScore)
     });
   } catch (err) {
     console.log("pingHealth throw", err);
